@@ -4,7 +4,7 @@ const { dbQuery } = require("./lib/db-query");
 
 app.use(express.json()); // allows us to access data in the HTTP request body
 
-
+const { Pool } = require('pg');
 let pool = new Pool({
   user: 'arnocai',
   password: 'my_password',
