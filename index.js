@@ -4,34 +4,6 @@ const { dbQuery } = require("./lib/db-query");
 
 app.use(express.json()); // allows us to access data in the HTTP request body
 
-const { Pool } = require('pg');
-let pool = new Pool({
-  user: 'arnocai',
-  password: 'my_password',
-  host: 'localhost',
-  port: 3001,
-  database: 'simple_crud',
-});
-
-async function test() {
-  try {
-    const response = await pool.query('SELECT * FROM users');
-    users = response['rows'];
-    console.log(users)
-    return users // returning an array of objects
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-
-
-
-
-
-
-
-
 // Index page
 app.get('/', (request, response) => {
   response.send('<p>Hi! Welcome to the API :)</p>');
@@ -39,11 +11,9 @@ app.get('/', (request, response) => {
 
 // Read ALL data points 
 app.get('/names', async (request, response) => {
-  // const GET_NAMES = "SELECT * FROM users";
-  // let result = await dbQuery(GET_NAMES);
-  // let names = result.rows; 
-
-  let names = await test();
+  const GET_NAMES = "SELECT * FROM users";
+  let result = await dbQuery(GET_NAMES);
+  let names = result.rows; 
   response.json(names);
 })
 
