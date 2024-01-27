@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const { dbQuery } = require("./lib/db-query");
+const Name = require('./lib/models/name.js')
 
 app.use(express.json()); // allows us to access data in the HTTP request body
 
@@ -41,11 +42,17 @@ app.post('/names', async (request, response) => {
     response.send('<p>Please enter a name...</p>');
   } 
 
+  // insert into relational DB
   const ADD_NAME = "INSERT INTO users" + 
   " (name) VALUES" + 
   " ($1)"; 
-  
   let result = await dbQuery(ADD_NAME, body.name);
+
+  // insert into mongo DB
+  const name = new Name({
+    name: request.body.name,
+  });
+  name.save().catch(err => console.error(err));
 
   if (result.rowCount > 0) {
     response.send('<p>Success. Name added successfully</p>');
